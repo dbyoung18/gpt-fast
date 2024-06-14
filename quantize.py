@@ -619,4 +619,9 @@ if __name__ == '__main__':
     parser.add_argument('--label', type=str, default='_', help='label to add to output filename')
 
     args = parser.parse_args()
-    quantize(args.checkpoint_path, args.mode, args.groupsize, args.calibration_tasks, args.calibration_limit, args.calibration_seq_length, args.pad_calibration_inputs, args.percdamp, args.blocksize, args.label)
+    if "xpu" in args.device:
+        try:
+            import intel_extension_for_pytorch as ipex
+        except:
+            raise ModuleNotFoundError(f"Intel Extension for PyTorch (intel_extension_for_pytorch) is required to run PyTorch code on Intel GPU (XPU). Please check https://github.com/intel/intel-extension-for-pytorch for details.")
+    quantize(args.checkpoint_path, args.mode, args.groupsize, args.calibration_tasks, args.calibration_limit, args.calibration_seq_length, args.pad_calibration_inputs, args.percdamp, args.blocksize, args.label, args.device)
